@@ -5,18 +5,26 @@ const Header = () => <h1>give feedback</h1>;
 const Button = ({ onClick, text }) => (<button onClick={onClick}>{text}</button>);
 
 const Statistics = ({ statistics }) => {
-  return (
-    <>
-      <h1>statistics</h1>
-      <p>good {statistics.good}</p>
-      <p>neutral {statistics.neutral}</p>
-      <p>bad {statistics.bad}</p>
-      <p>total {statistics.total}</p>
-      <p>average {isNaN(statistics.average) ? '-' : statistics.average}</p>
-      <p>positive {isNaN(statistics.positive) ? '-' : `${statistics.positive} %`} </p>
-
-    </>
-  )
+  if (statistics.total === 0) {
+    return (
+      <>
+        <h1>statistics</h1>
+        <p>No feedback given</p>
+      </>
+    )
+  } else {
+    return (
+      <>
+        <h1>statistics</h1>
+        <p>good {statistics.good}</p>
+        <p>neutral {statistics.neutral}</p>
+        <p>bad {statistics.bad}</p>
+        <p>total {statistics.total}</p>
+        <p>average {isNaN(statistics.average) ? '-' : statistics.average}</p>
+        <p>positive {isNaN(statistics.positive) ? '-' : `${statistics.positive} %`} </p>
+      </>
+    )
+  }
 }
 
 const App = () => {
