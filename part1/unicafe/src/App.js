@@ -16,12 +16,16 @@ const Statistics = ({ statistics }) => {
     return (
       <>
         <h1>statistics</h1>
-        <StatisticsLine text="good" value={statistics.good} />
-        <StatisticsLine text="neutral" value={statistics.neutral} />
-        <StatisticsLine text="bad" value={statistics.bad} />
-        <StatisticsLine text="total" value={statistics.total} />
-        <StatisticsLine text="average" value={statistics.average} />
-        <StatisticsLine text="positive" value={statistics.positive} />
+        <table>
+          <tbody>
+            <StatisticsLine text="good" value={statistics.good} />
+            <StatisticsLine text="neutral" value={statistics.neutral} />
+            <StatisticsLine text="bad" value={statistics.bad} />
+            <StatisticsLine text="total" value={statistics.total} />
+            <StatisticsLine text="average" value={statistics.average} />
+            <StatisticsLine text="positive" value={statistics.positive} />
+          </tbody>
+        </table>
       </>
     )
   }
@@ -29,7 +33,10 @@ const Statistics = ({ statistics }) => {
 
 const StatisticsLine = ({ text, value }) => {
   return (
-    <p>{text} {isNaN(value) ? '-' : value}</p>
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
   )
 }
 
