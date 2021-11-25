@@ -16,15 +16,32 @@ const Statistics = ({ statistics }) => {
     return (
       <>
         <h1>statistics</h1>
-        <p>good {statistics.good}</p>
-        <p>neutral {statistics.neutral}</p>
-        <p>bad {statistics.bad}</p>
-        <p>total {statistics.total}</p>
-        <p>average {isNaN(statistics.average) ? '-' : statistics.average}</p>
-        <p>positive {isNaN(statistics.positive) ? '-' : `${statistics.positive} %`} </p>
+        <StatisticsLine text="good" value={statistics.good} />
+        <StatisticsLine text="neutral" value={statistics.neutral} />
+        <StatisticsLine text="bad" value={statistics.bad} />
+        <StatisticsLine text="total" value={statistics.total} />
+        <StatisticsLine text="average" value={statistics.average} />
+        <StatisticsLine text="positive" value={statistics.positive} />
       </>
     )
   }
+}
+
+const StatisticsLine = ({ text, value }) => {
+  return (
+    <p>{text} {isNaN(value) ? '-' : value}</p>
+  )
+}
+
+const Buttons = ({ buttonsFunctions }) => {
+  return (
+    <div>
+      <Button onClick={buttonsFunctions.increaseGood} text='good' />
+      <Button onClick={buttonsFunctions.increaseNeutral} text='neutral' />
+      <Button onClick={buttonsFunctions.increaseBad} text='bad' />
+    </div>
+
+  )
 }
 
 const App = () => {
@@ -46,29 +63,28 @@ const App = () => {
     positive: positive
   }
 
-  const increaseGood = () => {
-    setGood(good + 1);
-    setTotal(total + 1);
-  };
-  const increaseNeutral = () => {
-    setNeutral(neutral + 1);
-    setTotal(total + 1);
-  };
-  const increaseBad = () => {
-    setBad(bad + 1);
-    setTotal(total + 1);
-  };
+  const buttonsFunctions = {
+    increaseGood: () => {
+      setGood(good + 1);
+      setTotal(total + 1);
+    },
+    increaseNeutral: () => {
+      setNeutral(neutral + 1);
+      setTotal(total + 1);
+    },
+    increaseBad: () => {
+      setBad(bad + 1);
+      setTotal(total + 1);
+    }
+  }
 
   return (
     <div>
       <Header />
-      <Button onClick={increaseGood} text='good' />
-      <Button onClick={increaseNeutral} text='neutral' />
-      <Button onClick={increaseBad} text='bad' />
+      <Buttons buttonsFunctions={buttonsFunctions} />
       <Statistics statistics={statistics} />
     </div>
-  )
-
+  );
 
 }
 
