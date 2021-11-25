@@ -1,8 +1,18 @@
 import React, { useState } from 'react'
+import _ from "lodash";
 
 const Button = ({ onClick, text }) => (<button onClick={onClick}>{text}</button>);
 
 const InfoAnecdote = ({ vote }) => (<p>Has {vote} votes</p>)
+
+const Anecdote = ({ anecdote, title }) => {
+  return (
+    <>
+      <h1>Anecdote {title}</h1>
+      <p>{anecdote}</p>
+    </>
+  )
+}
 
 const App = () => {
   const anecdotes = [
@@ -16,11 +26,16 @@ const App = () => {
   ]
 
   //Established the votes at the beginning
-  let pointsStart = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 }
+  let pointsStart = { 0: 0, 1: 0, 2: 5, 3: 0, 4: 0, 5: 0, 6: 0 }
+  let maxValue = _.max(Object.values(pointsStart))
+  let keyWithMaxValue = _.findKey(pointsStart, o => o === maxValue)
 
+  //Set states
   const [selected, setSelected] = useState(0);
   const [points, setPoints] = useState(pointsStart);
+  const [mostVoted, setmostVoted] = useState(keyWithMaxValue);
 
+  //Onclicks events
   const randomAnecdote = () => {
     const randomNumber = Math.floor(Math.random() * anecdotes.length);
     setSelected(randomNumber);
@@ -31,18 +46,21 @@ const App = () => {
     // increment the property value by one
     copyPoints[selected] += 1
     setPoints(copyPoints);
+    let maxValue = _.max(Object.values(copyPoints))
+    let keyWithMaxValue = _.findKey(copyPoints, o => o === maxValue)
+    setmostVoted(keyWithMaxValue);
   }
-
 
 
   return (
     <div>
-      {anecdotes[selected]}
+      <Anecdote anecdote={anecdotes[selected]} title={"of the day"} />
       <InfoAnecdote vote={points[selected]} />
       <div>
         <Button onClick={vote} text={"Vote"} />
         <Button onClick={randomAnecdote} text={"Next Anecdote"} />
       </div>
+      <Anecdote anecdote={anecdotes[mostVoted]} title={"with most votes"} />
     </div>
   )
 }
