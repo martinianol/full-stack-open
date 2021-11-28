@@ -1,6 +1,7 @@
 import React from "react";
 
 const Persons = ({ persons, nameFiltered }) => {
+
   return (
     <ul>
       {persons.map(person => {
