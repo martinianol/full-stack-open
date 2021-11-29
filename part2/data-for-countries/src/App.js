@@ -15,7 +15,7 @@ const App = () => {
         let countriesFound = response.data
 
         let countriesFiltered = countriesFound.filter(country => country.name.common.toLowerCase().includes(countryToFind.toLowerCase()))
-        console.log(countriesFiltered)
+
         setCountries(countriesFiltered)
       })
   }, [countryToFind])
@@ -25,6 +25,10 @@ const App = () => {
     setCountryToFind(event.target.value)
   }
 
+  const showCountry = (country) => {
+    setCountryToFind(country)
+  }
+
 
   return (
     <div>
@@ -32,7 +36,7 @@ const App = () => {
         countryToFind={countryToFind}
         handleCountryInput={handleCountryInput}
       />
-      <Countries countries={countries} />
+      <Countries countries={countries} showCountry={showCountry} />
     </div>
   );
 }

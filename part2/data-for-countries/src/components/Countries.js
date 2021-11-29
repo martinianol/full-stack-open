@@ -1,21 +1,34 @@
 import React from "react";
 
-const Countries = ({ countries }) => {
-  console.log(countries)
+const Language = ({ language }) => {
+  return (<li>{language}</li>)
+}
+
+const CountryList = ({ countries, showCountry }) => {
+  return (
+    countries.map(country => {
+      return (
+        <div key={country.name.common}>
+          <p> {country.name.common}</p>
+          <button onClick={() => showCountry(country.name.common)}>Show Country</button>
+        </div>
+      )
+    })
+  )
+}
+
+const Countries = ({ countries, showCountry }) => {
   if (countries.length > 10) {
     return (
       <p>Too many matches, please be more specific</p>
     )
   } else if (countries.length > 1) {
     return (
-      countries.map(country => {
-        return (<p key={country.name.common}>{country.name.common}</p>)
-      })
-
+      <CountryList countries={countries} showCountry={showCountry} />
     )
   } else if (countries.length === 1) {
     const languages = Object.keys(countries[0].languages).map((key) => [key, countries[0].languages[key]]);
-    console.log(languages);
+
     return (
       <div>
         {<h2>{countries[0].name.common}</h2>}
@@ -23,9 +36,9 @@ const Countries = ({ countries }) => {
         <p>Population {countries[0].population}</p>
         <h3>Languages</h3>
         <ul>
-          {languages.map(language => {
-            return (<li key={language[0]}>{language[1]}</li>)
-          })}
+          {languages.map((language) =>
+            <Language key={language[0]} language={language[1]} />
+          )}
         </ul>
         <img src={countries[0].flags.png} alt="Country Flag" />
       </div>
