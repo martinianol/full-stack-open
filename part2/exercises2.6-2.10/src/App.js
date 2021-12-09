@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
 import Filter from './components/Filter'
 import Form from './components/Form'
 import Persons from './components/Persons'
 import personsService from './services/persons'
-const baseUrl = 'http://localhost:3001/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -54,6 +52,19 @@ const App = () => {
     setNameFiltered(event.target.value)
   }
 
+  const deletePerson = (person) => {
+
+    let { id } = person
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personsService
+        .destroy(id)
+        .then(deletedPerson => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    }
+
+  }
+
 
 
 
@@ -75,6 +86,7 @@ const App = () => {
       <Persons
         persons={persons}
         nameFiltered={nameFiltered}
+        deletePerson={deletePerson}
       />
     </div>
   )
