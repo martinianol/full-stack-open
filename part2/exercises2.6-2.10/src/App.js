@@ -3,6 +3,7 @@ import axios from 'axios';
 import Filter from './components/Filter'
 import Form from './components/Form'
 import Persons from './components/Persons'
+const baseUrl = 'http://localhost:3001/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -12,7 +13,7 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/persons')
+      .get(baseUrl)
       .then(response => {
         setPersons(response.data)
       })
@@ -28,12 +29,16 @@ const App = () => {
     const personObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1
+
     }
 
-    setPersons(persons.concat(personObject))
-    setNewName('')
-    setNewNumber('')
+    axios
+      .post(baseUrl, personObject)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   const handlePersonChange = (event) => {
