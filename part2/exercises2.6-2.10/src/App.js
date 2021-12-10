@@ -28,8 +28,6 @@ const App = () => {
       return alert('Please enter a valid number')
     }
 
-
-
     const personObject = {
       name: newName,
       number: newNumber,
@@ -56,9 +54,7 @@ const App = () => {
         setNewNumber('')
         return
       }
-
     }
-
 
     personsService
       .create(personObject)
@@ -67,7 +63,6 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
-
   }
 
   const handlePersonChange = (event) => {
@@ -94,9 +89,6 @@ const App = () => {
     }
 
   }
-
-
-
 
   return (
     <div>
