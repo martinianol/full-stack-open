@@ -12,6 +12,7 @@ const App = () => {
   const [nameFiltered, setNameFiltered] = useState('');
   const [nameMessage, setNameMessage] = useState(null)
   const [message, setMessage] = useState('')
+  const [colorMessage, setColorMessage] = useState('green')
 
   useEffect(() => {
     personsService
@@ -45,17 +46,27 @@ const App = () => {
         personsService
           .update(personAlreadyInPhoneBook.id, personObject)
           .then(updatedPerson => {
+            setNameMessage(newName)
             let personsTemp = persons.filter(person => person.id !== personAlreadyInPhoneBook.id)
             setPersons(personsTemp.concat(updatedPerson))
-            setNameMessage(newName)
             setMessage('Modified')
-            setTimeout(() => {
-              setNameMessage(null)
-              setMessage('')
-            }, 5000)
             setNewName('')
             setNewNumber('')
           })
+
+          .catch(error => {
+            setNameMessage(newName)
+            setMessage('Information has already been removed of user')
+            setColorMessage('red')
+            setTimeout(() => {
+              setNameMessage(null)
+              setMessage('')
+              setColorMessage('green')
+            }, 3000)
+            setNewName('')
+            setNewNumber('')
+          })
+
         return
 
       } else {
@@ -74,7 +85,7 @@ const App = () => {
         setTimeout(() => {
           setNameMessage(null)
           setMessage('')
-        }, 5000)
+        }, 3000)
         setNewName('')
         setNewNumber('')
       })
@@ -99,7 +110,13 @@ const App = () => {
       personsService
         .destroy(id)
         .then(deletedPerson => {
+          setNameMessage(person.name)
+          setMessage('Deleted')
           setPersons(persons.filter(person => person.id !== id))
+          setTimeout(() => {
+            setNameMessage(null)
+            setMessage('')
+          }, 3000)
         })
     }
 
@@ -111,6 +128,7 @@ const App = () => {
       <Notification
         name={nameMessage}
         message={message}
+        colorMessage={colorMessage}
       />
       <Filter
         nameFiltered={nameFiltered}

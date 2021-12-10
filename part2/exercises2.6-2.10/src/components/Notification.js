@@ -1,7 +1,7 @@
-const Notification = ({ name, message }) => {
+const Notification = ({ name, message, colorMessage }) => {
 
   const notificationStyle = {
-    color: 'green',
+    color: colorMessage,
     backgroundColor: 'lightGrey',
     fontStyle: 'bold',
     fontSize: 20,
@@ -21,6 +21,7 @@ const Notification = ({ name, message }) => {
       {message} {name}
     </div>
   )
+
 }
 
 export default Notification
