@@ -21,14 +21,44 @@ const App = () => {
   const addNumber = (event) => {
     event.preventDefault();
 
-    if (persons.some(person => person.name === newName)) {
-      return alert(`${newName} is already added to phonebook`)
+    if (newName === '') {
+      return alert('Please enter a valid name')
     }
+    if (newNumber === '') {
+      return alert('Please enter a valid number')
+    }
+
+
 
     const personObject = {
       name: newName,
       number: newNumber,
     }
+
+    let personAlreadyInPhoneBook = persons.find(person => person.name === newName)
+
+    if (personAlreadyInPhoneBook !== undefined) {
+
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+
+        personsService
+          .update(personAlreadyInPhoneBook.id, personObject)
+          .then(updatedPerson => {
+            let personsTemp = persons.filter(person => person.id !== personAlreadyInPhoneBook.id)
+            setPersons(personsTemp.concat(updatedPerson))
+            setNewName('')
+            setNewNumber('')
+          })
+        return
+
+      } else {
+        setNewName('')
+        setNewNumber('')
+        return
+      }
+
+    }
+
 
     personsService
       .create(personObject)
