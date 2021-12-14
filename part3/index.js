@@ -30,7 +30,7 @@ const requestLogger = (request, response, next) => {
 app.use(requestLogger)
 
 
-let notes = [
+/* let notes = [
   {
     id: 1,
     content: "HTML is easy",
@@ -49,7 +49,7 @@ let notes = [
     date: "2019-05-30T19:20:14.298Z",
     important: true
   }
-]
+] */
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
