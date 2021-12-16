@@ -89,6 +89,17 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
+      .catch(error => {
+        console.log(error.response.data)
+        setNameMessage('Error')
+        setMessage(error.response.data.error)
+        setColorMessage('red')
+        setTimeout(() => {
+          setNameMessage(null)
+          setMessage('')
+          setColorMessage('green')
+        }, 5000)
+      })
   }
 
   const handlePersonChange = (event) => {
