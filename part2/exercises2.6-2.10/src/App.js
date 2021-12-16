@@ -55,8 +55,9 @@ const App = () => {
           })
 
           .catch(error => {
-            setNameMessage(newName)
-            setMessage('Information has already been removed of user')
+            console.log(error.response.data)
+            setNameMessage('Error')
+            setMessage(error.response.data.error)
             setColorMessage('red')
             setTimeout(() => {
               setNameMessage(null)
@@ -79,7 +80,7 @@ const App = () => {
     personsService
       .create(personObject)
       .then(response => {
-        setPersons(response)
+        setPersons(persons.concat(response))
         setNameMessage(newName)
         setMessage('Added')
         setTimeout(() => {
