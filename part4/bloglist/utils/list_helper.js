@@ -21,24 +21,43 @@ const favoriteBlog = (blogs) => {
 
 const mostBlogs = (blogs) => {
   const authorsQty = _.countBy(blogs, element => element.author)
-  console.log(authorsQty)
 
   const author = Object.keys(authorsQty).reduce((prev, current) => authorsQty[prev] > authorsQty[current] ? prev : current);
-  console.log(author)
 
   const authorObj = {
     author: author,
     blogs: authorsQty[author]
   }
-  console.log(authorObj)
-
 
   return authorObj
+}
+
+const mostLikes = (blogs) => {
+
+  const blogsUniq = _.uniqBy(blogs, element => element.author)
+
+  const authors = blogsUniq.map(element => element.author)
+
+  const authorsLikes = authors.map(author => {
+    let countLikes = 0
+    blogs.forEach(blog => {
+      if (blog.author === author) {
+        countLikes = countLikes + blog.likes
+      }
+    })
+    return { author: author, likes: countLikes }
+  })
+
+  const authorMaxLikes = _.maxBy(authorsLikes, o => o.likes);
+
+  return authorMaxLikes
+
 }
 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
