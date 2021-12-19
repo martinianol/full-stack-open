@@ -14,7 +14,13 @@ beforeEach(async () => {
   await noteObject.save()
 })
 
+afterAll(() => {
+  mongoose.connection.close()
+})
 
+/**
+ * Tests
+ */
 
 test('notes are returned as json', async () => {
   await api
@@ -23,9 +29,6 @@ test('notes are returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 }, 100000)
 
-afterAll(() => {
-  mongoose.connection.close()
-})
 
 test('all notes are returned', async () => {
   const response = await api.get('/api/notes')
@@ -33,11 +36,13 @@ test('all notes are returned', async () => {
   expect(response.body).toHaveLength(helper.initialNotes.length)
 }, 100000)
 
+
 test('the first note is about HTTP methods', async () => {
   const response = await api.get('/api/notes')
 
   expect(response.body[0].content).toBe('HTML is easy')
 })
+
 
 test('a specific note is within the returned notes', async () => {
   const response = await api.get('/api/notes')
@@ -47,6 +52,7 @@ test('a specific note is within the returned notes', async () => {
     'Browser can execute only Javascript'
   )
 })
+
 
 test('a valid note can be added', async () => {
   const newNote = {
@@ -71,6 +77,7 @@ test('a valid note can be added', async () => {
   )
 })
 
+
 test('note without content is not added', async () => {
   const newNote = {
     important: true
@@ -86,6 +93,7 @@ test('note without content is not added', async () => {
   expect(notesAtEnd).toHaveLength(helper.initialNotes.length)
 })
 
+
 test('a specific note can be viewed', async () => {
   const notesAtStart = await helper.notesInDb()
 
@@ -100,6 +108,7 @@ test('a specific note can be viewed', async () => {
 
   expect(resultNote.body).toEqual(processedNoteToView)
 })
+
 
 test('a note can be deleted', async () => {
   const notesAtStart = await helper.notesInDb()
