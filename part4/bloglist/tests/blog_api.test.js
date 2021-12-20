@@ -64,16 +64,26 @@ test('it creates a new blog', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-
   const blogsAtEnd = await helper.blogsInDb()
-
   expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
   const titles = blogsAtEnd.map(b => b.title)
-
   expect(titles).toContain('Blog Test')
 
+})
 
+test('if likes are missing default to 0', async () => {
+  const newBlog = {
+    title: "Blog Test",
+    author: "Test author",
+    url: "www.test.com",
+  }
+
+  const createdBlog = await api
+    .post('/api/blogs')
+    .send(newBlog)
+  console.log(createdBlog.body)
+  expect(createdBlog.body.likes).toBe(0)
 
 
 
