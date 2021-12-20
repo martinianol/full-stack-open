@@ -7,8 +7,6 @@ const _ = require('lodash');
 
 const Blog = require('../models/blog')
 
-
-
 beforeEach(async () => {
   await Blog.deleteMany({})
 
@@ -69,7 +67,6 @@ test('it creates a new blog', async () => {
 
   const titles = blogsAtEnd.map(b => b.title)
   expect(titles).toContain('Blog Test')
-
 })
 
 test('if likes are missing default to 0', async () => {
@@ -82,9 +79,20 @@ test('if likes are missing default to 0', async () => {
   const createdBlog = await api
     .post('/api/blogs')
     .send(newBlog)
-  console.log(createdBlog.body)
+
   expect(createdBlog.body.likes).toBe(0)
+})
 
+test('if title OR url are missing response should be 400', async () => {
 
+  const newBlogNoUrl = {
+    title: "Blog Test",
+    author: "Test author",
+    likes: 10
+  }
 
+  const createdBlog = await api
+    .post('/api/blogs')
+    .send(newBlogNoUrl)
+    .expect(400)
 })
