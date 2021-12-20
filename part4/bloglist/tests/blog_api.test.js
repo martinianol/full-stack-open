@@ -112,3 +112,24 @@ describe('deletion of a note', () => {
 
   })
 })
+
+describe('update of a blog', () => {
+  test('success by updating a blog with valid id', async () => {
+    const response = await api.get('/api/blogs')
+
+    const firstBlog = response.body[0]
+
+    const newBlogInfo = {
+      title: "Updated Title",
+      author: "Updated Author",
+      url: "www.updatedurl.com",
+      likes: 20
+    }
+
+    const updatedBlog = await api
+      .put(`/api/blogs/${firstBlog.id}`)
+      .send(newBlogInfo)
+
+    expect(updatedBlog.body.title).toBe(newBlogInfo.title)
+  })
+})
