@@ -3,6 +3,7 @@ const helper = require('./test_helper')
 const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
+const _ = require('lodash');
 
 const Blog = require('../models/blog')
 
@@ -38,3 +39,12 @@ test('all blogs are returned', async () => {
 
   expect(response.body).toHaveLength(helper.initialBlogs.length)
 }, 100000)
+
+test('there is an id property', async () => {
+  const response = await api.get('/api/blogs')
+
+  const firstBlog = response.body[0]
+  console.log(firstBlog)
+
+  expect(_.has(firstBlog, 'id')).toBeTruthy()
+})
