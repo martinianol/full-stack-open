@@ -1,10 +1,11 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuaXRhIiwiaWQiOiI2MWMxZDMwNTJmZjhjMWMxY2ZkMGE4MDQiLCJpYXQiOjE2NDAwOTg3ODR9.OJ0XYIUe5DK1t5TjGlcbRKDETv_KwrmywwcKGTLRlr0
 
 {
-  "title": "Test Blog with user",
-  "author": "Joe",
-  "url": "www.express.com",
-  "likes": 15
+  "title": "Test Blog with token",
+  "author": "Will Williams",
+  "url": "www.token.com",
+  "likes": 3
 }
 
