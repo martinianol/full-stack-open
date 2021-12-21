@@ -3,7 +3,7 @@ const User = require('../models/user')
 const bcrypt = require('bcryptjs')
 
 usersRouter.get('/', async (request, response) => {
-  const users = await User.find({})
+  const users = await User.find({}).populate('blogs', { url: 1, title: 1, author: 1, id: 1 })
 
   response.json(users)
 })
@@ -11,7 +11,7 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.post('/', async (request, response, next) => {
   const body = request.body
 
-  if (!body.name || !body.user) {
+  if (!body.name || !body.username) {
     return response.status(400).send({ error: 'name or username missing' })
   }
 

@@ -23,17 +23,17 @@ const initialUsers = [
   {
     username: "mars",
     name: "Martiniano",
-    password: 12345678
+    password: "12345678"
   },
   {
     username: "jose",
     name: "Josefina",
-    password: 12345678
+    password: "12345678"
   },
   {
     username: "ana",
     name: "Ana",
-    password: 12345678
+    password: "12345678"
   }
 
 ]
