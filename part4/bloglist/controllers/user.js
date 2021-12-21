@@ -8,8 +8,16 @@ usersRouter.get('/', async (request, response) => {
   response.json(users)
 })
 
-usersRouter.post('/', async (request, response) => {
+usersRouter.post('/', async (request, response, next) => {
   const body = request.body
+
+  if (!body.name || !body.user) {
+    return response.status(400).send({ error: 'name or username missing' })
+  }
+
+  if (body.password.length < 3) {
+    return response.status(400).send({ error: 'password length needs 3 characters min' })
+  }
 
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(body.password, saltRounds)
@@ -20,9 +28,11 @@ usersRouter.post('/', async (request, response) => {
     passwordHash,
   })
 
-  const savedUser = await user.save()
 
+  const savedUser = await user.save()
   response.json(savedUser)
+
+
 })
 
 
