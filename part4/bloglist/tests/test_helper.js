@@ -1,20 +1,30 @@
 const Blog = require('../models/blog')
+const supertest = require('supertest')
+const app = require('../app')
+const api = supertest(app)
+
 
 const initialBlogs = [
   {
     title: "Title A",
     author: "Author A",
-    likes: 12
+    url: "www.urlA.com",
+    likes: 12,
+    blogs: []
   },
   {
     title: "Title B",
     author: "Author B",
-    likes: 18
+    url: "www.urlB.com",
+    likes: 18,
+    blogs: []
   },
   {
     title: "Title C",
     author: "Author C",
-    likes: 9
+    url: "www.urlC.com",
+    likes: 9,
+    blogs: []
   }
 
 ]
@@ -49,9 +59,19 @@ const usersInDb = async () => {
   return users.map(user => user.toJSON())
 }
 
+const tokenHelp = async () => {
+  const userTest = initialUsers[0]
+  const userLoggedIn = await api.post('/api/login').send(userTest)
+
+  const token = userLoggedIn.body.token
+
+  return token
+}
+
 module.exports = {
   initialBlogs,
   blogsInDb,
   initialUsers,
-  usersInDb
+  usersInDb,
+  tokenHelp
 }

@@ -1,21 +1,40 @@
 const mongoose = require('mongoose')
 const helper = require('./test_helper')
 const supertest = require('supertest')
+const bcrypt = require('bcrypt')
 const app = require('../app')
 const api = supertest(app)
 const _ = require('lodash');
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 beforeEach(async () => {
+  await User.deleteMany({})
   await Blog.deleteMany({})
 
-  for (let blog of helper.initialBlogs) {
-    let blogObject = new Blog(blog)
-    await blogObject.save()
+  const saltRounds = 10
+
+  for (let user of helper.initialUsers) {
+    const passwordHash = await bcrypt.hash(user.password, saltRounds)
+    user.passwordHash = passwordHash
+    let userObject = new User(user)
+    await userObject.save()
   }
 
-})
+  const response = await api.get('/api/users')
+  const user = response.body[0]
+
+
+  for (let blog of helper.initialBlogs) {
+    blog.user = user.id
+    let blogObject = new Blog(blog)
+    const blogSaved = await blogObject.save()
+    user.blogs = user.blogs.concat(blogSaved._id)
+  }
+  // await user.save() 
+
+}, 100000)
 
 afterAll(() => {
   mongoose.connection.close()
@@ -48,6 +67,7 @@ test('there is an id property', async () => {
 })
 
 test('it creates a new blog', async () => {
+  const token = await helper.tokenHelp()
 
   const newBlog = {
     title: "Blog Test",
@@ -58,6 +78,7 @@ test('it creates a new blog', async () => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -70,6 +91,8 @@ test('it creates a new blog', async () => {
 })
 
 test('if likes are missing default to 0', async () => {
+  const token = await helper.tokenHelp()
+
   const newBlog = {
     title: "Blog Test",
     author: "Test author",
@@ -78,12 +101,14 @@ test('if likes are missing default to 0', async () => {
 
   const createdBlog = await api
     .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(newBlog)
 
   expect(createdBlog.body.likes).toBe(0)
 })
 
 test('if title OR url are missing response should be 400', async () => {
+  const token = await helper.tokenHelp()
 
   const newBlogNoUrl = {
     title: "Blog Test",
@@ -93,6 +118,7 @@ test('if title OR url are missing response should be 400', async () => {
 
   const createdBlog = await api
     .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(newBlogNoUrl)
     .expect(400)
 })
@@ -100,10 +126,13 @@ test('if title OR url are missing response should be 400', async () => {
 describe('deletion of a note', () => {
   test('success with status code 204 if id is valid', async () => {
     const response = await api.get('/api/blogs')
-
     const firstBlog = response.body[0]
 
-    await api.delete(`/api/blogs/${firstBlog.id}`)
+    const token = await helper.tokenHelp()
+
+    await api
+      .delete(`/api/blogs/${firstBlog.id}`)
+      .set('Authorization', `bearer ${token}`)
       .expect(204)
 
     const blogsAtEnd = await (await api.get('/api/blogs')).body

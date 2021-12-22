@@ -13,13 +13,13 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', userExtractor, async (request, response) => {
 
-  const { title, author, url, likes } = request.body
-
   const user = request.user
 
   if (!request.body.likes) {
     request.body.likes = 0
   }
+
+  const { title, author, url, likes } = request.body
 
   if (!request.body.url || !request.body.title) {
     return response.status(400).send()
