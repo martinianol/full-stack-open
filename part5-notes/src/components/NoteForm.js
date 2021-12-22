@@ -1,5 +1,5 @@
 const NoteForm = (props) => (
-  <form onSubmit={() => props.onSubmit}>
+  <form onSubmit={props.onSubmit}>
     <input
       value={props.newNote}
       onChange={props.handleNoteChange}

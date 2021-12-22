@@ -1,5 +1,5 @@
 const LoginForm = (props) => (
-  <form onSubmit={() => props.onSubmit}>
+  <form onSubmit={props.onSubmit}>
     <div>
       username
       <input
