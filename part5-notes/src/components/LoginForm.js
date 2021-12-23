@@ -1,39 +1,43 @@
+import React, { useState } from 'react'
+
 const LoginForm = (props) => {
-  const hideWhenVisible = { display: props.loginVisible ? 'none' : '' }
-  const showWhenVisible = { display: props.loginVisible ? '' : 'none' }
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const login = async (event) => {
+    event.preventDefault()
+    await props.handleLogin(username, password)
+
+    /* setUsername('')
+    setPassword('') */
+  }
 
   return (
     <div>
-      <div style={hideWhenVisible}>
-        <button onClick={() => props.handleLoginVisible(true)}>log in</button>
-      </div>
-
-      <div style={showWhenVisible}>
-
-        <form onSubmit={props.onSubmit}>
-          <div>
-            username
-            <input
-              type="text"
-              value={props.username}
-              name="Username"
-              onChange={({ target }) => props.handleUsername(target.value)}
-            />
-          </div>
-          <div>
-            password
-            <input
-              type="password"
-              value={props.password}
-              name="Password"
-              onChange={({ target }) => props.handlePassword(target.value)}
-            />
-          </div>
-          <button type="submit">login</button>
-        </form>
-        <button onClick={() => props.handleLoginVisible(false)}>cancel</button>
-      </div>
+      <form onSubmit={login}>
+        <div>
+          username
+          <input
+            type="text"
+            value={username}
+            name="Username"
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div>
+          password
+          <input
+            type="password"
+            value={password}
+            name="Password"
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button type="submit">login</button>
+      </form>
     </div>
+
   )
 }
 

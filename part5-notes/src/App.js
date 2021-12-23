@@ -4,17 +4,14 @@ import Notification from './components/Notification'
 import Footer from './components/Footer'
 import NoteForm from './components/NoteForm'
 import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
 import noteService from './services/notes'
 import loginService from './services/login'
 
 const App = () => {
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
-
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [loginVisible, setLoginVisible] = useState(false)
 
@@ -35,21 +32,11 @@ const App = () => {
     }
   }, [])
 
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      date: new Date().toISOString(),
-      important: Math.random() > 0.5,
-    }
-
-    noteService
-      .create(noteObject)
-      .then(returnedNote => {
-        setNotes(notes.concat(returnedNote))
-        setNewNote('')
-      })
+  const addNote = async (noteObject) => {
+    const returnedNote = await noteService.create(noteObject)
+    setNotes(notes.concat(returnedNote))
   }
+
 
   const toggleImportanceOf = id => {
     const note = notes.find(n => n.id === id)
@@ -70,17 +57,12 @@ const App = () => {
       })
   }
 
-  const handleNoteChange = (event) => {
-    console.log(event.target.value)
-    setNewNote(event.target.value)
-  }
-
   const notesToShow = showAll
     ? notes
     : notes.filter(note => note.important)
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  const handleLogin = async (username, password) => {
+
     console.log('logging in with', username, password)
 
     try {
@@ -94,8 +76,7 @@ const App = () => {
 
       noteService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
+
     } catch (exception) {
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
@@ -114,21 +95,22 @@ const App = () => {
     <div>
       <h1>Notes</h1>
       <Notification message={errorMessage} />
-      {user === null ?
-        <LoginForm
-          onSubmit={handleLogin}
-          username={username}
-          handleUsername={setUsername}
-          password={password}
-          handlePassword={setPassword}
-          loginVisible={loginVisible}
-          handleLoginVisible={setLoginVisible}
-        /> :
+      {!user &&
+        <Togglable buttonLabel="login">
+          <LoginForm
+            handleLogin={handleLogin}
+            loginVisible={loginVisible}
+            handleLoginVisible={setLoginVisible}
+          />
+        </Togglable>
+      }
+      {user &&
         <div>
           <p>{user.name} logged-in</p>
           <button onClick={handleLogout}>Log Out</button>
         </div>
       }
+
 
       <div>
         <button onClick={() => setShowAll(!showAll)}>
@@ -144,13 +126,14 @@ const App = () => {
           />
         )}
       </ul>
-      {user !== null ?
-        <NoteForm
-          onSubmit={addNote}
-          newNote={newNote}
-          handleNoteChange={handleNoteChange}
-        />
-        : ''
+      {user ?
+        <Togglable buttonLabel="new note">
+          <NoteForm
+            createNote={addNote}
+          />
+        </Togglable>
+        :
+        ''
       }
 
       <Footer />
