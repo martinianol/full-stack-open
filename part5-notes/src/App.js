@@ -16,6 +16,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect(() => {
     noteService
@@ -117,20 +118,15 @@ const App = () => {
         <LoginForm
           onSubmit={handleLogin}
           username={username}
-          setUsername={setUsername}
+          handleUsername={setUsername}
           password={password}
-          setPassword={setPassword}
+          handlePassword={setPassword}
+          loginVisible={loginVisible}
+          handleLoginVisible={setLoginVisible}
         /> :
         <div>
           <p>{user.name} logged-in</p>
-          <NoteForm
-            onSubmit={addNote}
-            newNote={newNote}
-            handleNoteChange={handleNoteChange}
-          />
           <button onClick={handleLogout}>Log Out</button>
-
-
         </div>
       }
 
@@ -148,6 +144,14 @@ const App = () => {
           />
         )}
       </ul>
+      {user !== null ?
+        <NoteForm
+          onSubmit={addNote}
+          newNote={newNote}
+          handleNoteChange={handleNoteChange}
+        />
+        : ''
+      }
 
       <Footer />
     </div>
