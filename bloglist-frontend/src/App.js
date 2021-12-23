@@ -27,6 +27,10 @@ const App = () => {
     }
     try {
       const user = await loginService.login(credentials)
+
+      window.localStorage.setItem('loggedBlogeappUser', JSON.stringify(user))
+
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -40,20 +44,27 @@ const App = () => {
 
   }
 
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedBlogappUser')
+    blogService.setToken(null)
+    setUser(null)
+  }
+
   return (
     <div>
-      <LoginForm
-        onSubmit={handleLogin}
-        username={username}
-        setUsername={setUsername}
-        password={password}
-        setPassword={setPassword}
-      />
 
       {user === null ?
-        '' :
+        <LoginForm
+          onSubmit={handleLogin}
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+        />
+        :
         <div>
           <p>{user.name} logged in</p>
+          <button onClick={handleLogout}>Logout</button>
           <h2>blogs</h2>
           {blogs.map(blog =>
             <Blog key={blog.id} blog={blog} />
