@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import CreateBlog from './components/CreateBlog'
+import Message from './components/Message'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [error, setErrorMessage] = useState('')
+  const [error, setError] = useState(false)
+  const [message, setMessage] = useState(null)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -42,9 +44,11 @@ const App = () => {
       setPassword('')
 
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
+      setMessage('Wrong username or password')
+      setError(true)
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage(null)
+        setError(false)
       }, 5000)
     }
 
@@ -69,11 +73,17 @@ const App = () => {
     setTitle('')
     setAuthor('')
     setUrl('')
+    setMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
   }
 
   return (
     <div>
-
+      {
+        message !== null && <Message message={message} isError={error} />
+      }
       {user === null ?
         <LoginForm
           onSubmit={handleLogin}
