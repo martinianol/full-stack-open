@@ -11,27 +11,18 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [error, setError] = useState(false)
   const [message, setMessage] = useState(null)
-
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
-
-
+  const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    (async () => {
+      const blogs = await blogService.getAll()
       setBlogs(blogs)
-    )
+    })();
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    console.log('loggin in with', username, password)
-    let credentials = {
-      username,
-      password
-    }
+  const handleLogin = async (credentials) => {
     try {
       const user = await loginService.login(credentials)
 
@@ -39,8 +30,7 @@ const App = () => {
 
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
+
 
     } catch (exception) {
       setMessage('Wrong username or password')
@@ -59,7 +49,7 @@ const App = () => {
     setUser(null)
   }
 
-  const blogFormRef = useRef()
+
 
   const addBlog = async (blogObject) => {
 
@@ -81,10 +71,6 @@ const App = () => {
       {user === null ?
         <LoginForm
           onSubmit={handleLogin}
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
         />
         :
         <div>

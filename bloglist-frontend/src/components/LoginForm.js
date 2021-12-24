@@ -1,27 +1,52 @@
-const LoginForm = (props) => (
-  <form onSubmit={props.onSubmit}>
-    <h2>login into application</h2>
-    <div>
-      username
-      <input
-        type="text"
-        value={props.username}
-        name="Username"
-        onChange={({ target }) => props.setUsername(target.value)}
-      />
-    </div>
-    <div>
-      password
-      <input
-        type="password"
-        value={props.password}
-        name="Password"
-        onChange={({ target }) => props.setPassword(target.value)}
-      />
-    </div>
-    <button type="submit">login</button>
-  </form>
+import React, { useEffect, useState } from 'react'
 
-)
+const LoginForm = (props) => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const loginUser = async (event) => {
+    event.preventDefault()
+    console.log('loggin in with', username, password)
+
+    let credentials = {
+      username,
+      password
+    }
+    await props.onSubmit(credentials)
+
+  }
+
+  useEffect(() => {
+    setUsername('')
+    setPassword('')
+  }, [])
+
+
+  return (
+    <form onSubmit={loginUser}>
+      <h2>login into application</h2>
+      <div>
+        username
+        <input
+          type="text"
+          value={username}
+          name="Username"
+          onChange={({ target }) => setUsername(target.value)}
+        />
+      </div>
+      <div>
+        password
+        <input
+          type="password"
+          value={password}
+          name="Password"
+          onChange={({ target }) => setPassword(target.value)}
+        />
+      </div>
+      <button type="submit">login</button>
+    </form>
+
+  )
+}
 
 export default LoginForm
