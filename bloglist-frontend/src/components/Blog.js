@@ -1,11 +1,28 @@
 import React, { useState } from 'react'
+import blogs from '../services/blogs'
+
 const Blog = ({ blog }) => {
   const [view, setView] = useState(false)
   const [viewHide, setViewHide] = useState('view')
+  const [blogLikes, setBloglikes] = useState(blog.likes)
 
   const handleView = () => {
     setView(!view)
     viewHide === 'view' ? setViewHide('hide') : setViewHide('view')
+  }
+
+  const addLike = async () => {
+
+    let blogObject = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user.id,
+      id: blog.id
+    }
+    setBloglikes(blogLikes + 1)
+    await blogs.update(blogObject)
   }
 
   const details = () => {
@@ -15,7 +32,7 @@ const Blog = ({ blog }) => {
           url: {blog.url}
         </p>
         <p>
-          likes: {blog.likes} <button>like</button>
+          likes: {blogLikes} <button onClick={addLike}>like</button>
         </p>
         <p>
           user: {blog.user.username}
@@ -23,6 +40,7 @@ const Blog = ({ blog }) => {
       </div>
     )
   }
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
