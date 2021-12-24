@@ -35,6 +35,7 @@ const App = () => {
 
   const addNote = async (noteObject) => {
     noteFormRef.current.toggleVisibility()
+
     const returnedNote = await noteService.create(noteObject)
     setNotes(notes.concat(returnedNote))
   }
