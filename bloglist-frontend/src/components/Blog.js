@@ -1,10 +1,26 @@
 import React, { useState } from 'react'
 import blogs from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, user, onUpdate, removeBlog }) => {
   const [view, setView] = useState(false)
   const [viewHide, setViewHide] = useState('view')
   const [blogLikes, setBloglikes] = useState(blog.likes)
+
+  const isUserBlog = () => {
+    if (user.blogs.includes(blog.id)) {
+      return (
+        <button onClick={handleRemove}>Remove Blog</button>
+      )
+    }
+  }
+
+  const handleRemove = () => {
+    if (
+      window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
+    ) {
+      removeBlog(blog.id)
+    }
+  }
 
   const handleView = () => {
     setView(!view)
@@ -22,10 +38,12 @@ const Blog = ({ blog }) => {
       id: blog.id
     }
     setBloglikes(blogLikes + 1)
+    onUpdate()
     await blogs.update(blogObject)
   }
 
   const details = () => {
+
     return (
       <div>
         <p>
@@ -37,6 +55,7 @@ const Blog = ({ blog }) => {
         <p>
           user: {blog.user.username}
         </p>
+        {isUserBlog()}
       </div>
     )
   }
@@ -54,6 +73,7 @@ const Blog = ({ blog }) => {
       {blog.title} {blog.author}
       <button onClick={handleView}>{viewHide} details</button>
       {view && details()}
+
     </div>
   )
 }

@@ -13,6 +13,14 @@ const getAll = async () => {
 
 }
 
+const getOne = async id => {
+  const url = `${baseUrl}/${id}`
+
+  const response = await axios.get(url)
+  return response.data
+
+}
+
 const create = async blogObject => {
 
   const config = {
@@ -35,9 +43,22 @@ const update = async blogObject => {
 
 }
 
+const destroy = async id => {
+  const url = `${baseUrl}/${id}`
+
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  const response = await axios.delete(url, config)
+  return response.status
+}
+
 export default {
   getAll,
+  getOne,
   setToken,
   create,
-  update
+  update,
+  destroy
 }
