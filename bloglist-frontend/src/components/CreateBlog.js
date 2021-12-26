@@ -18,6 +18,11 @@ const CreateBlog = (props) => {
   const addBlog = async (event) => {
     event.preventDefault()
 
+    if (title === '' || author === '' || url === '') {
+      console.log('data missing')
+      return
+    }
+
     const blogObject = {
       title: title,
       author: author,
@@ -35,6 +40,7 @@ const CreateBlog = (props) => {
       <h2>Create New Blog</h2>
       <div>Title:
         <input
+          id="title"
           type="text"
           value={title}
           name="Title"
@@ -43,6 +49,7 @@ const CreateBlog = (props) => {
       </div>
       <div>Author:
         <input
+          id="author"
           type="text"
           value={author}
           name="Author"
@@ -51,6 +58,7 @@ const CreateBlog = (props) => {
       </div>
       <div>URL:
         <input
+          id="url"
           type="text"
           value={url}
           name="Url"
