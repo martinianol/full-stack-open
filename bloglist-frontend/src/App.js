@@ -21,7 +21,7 @@ const App = () => {
     (async () => {
       const blogs = await blogService.getAll()
       setBlogs(blogs)
-    })();
+    })()
   }, [user])
 
   const handleLogin = async (credentials) => {
