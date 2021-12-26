@@ -19,7 +19,7 @@ const NoteForm = (props) => {
   }
 
   return (
-    <div>
+    <div className='formDiv'>
       <h3>New note</h3>
 
       <form onSubmit={addNote}>
