@@ -13,7 +13,7 @@ const NoteForm = (props) => {
     props.createNote({
       content: newNote,
       date: new Date().toISOString(),
-      important: Math.random() > 0.5,
+      important: true,
     })
     setNewNote('')
   }
