@@ -45,11 +45,11 @@ const Blog = ({ blog, user, onUpdate, removeBlog }) => {
   const details = () => {
 
     return (
-      <div>
+      <div className='details'>
         <p>
           url: {blog.url}
         </p>
-        <p>
+        <p id='likes'>
           likes: {blogLikes} <button onClick={addLike}>like</button>
         </p>
         <p>

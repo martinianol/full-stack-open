@@ -60,8 +60,29 @@ describe('Blog app', function () {
         .and('have.css', 'color', 'rgb(0, 128, 0)')
       cy.get('.blog')
         .should('contain', 'Test Cypress Blog Mr. Cypress')
-
     })
+    describe('several blogs can de created', function () {
+      beforeEach(function () {
+        cy.createBlog({ title: 'first blog', author: 'Mr. A', url: 'www.urlA.com' })
+        cy.createBlog({ title: 'second blog', author: 'Mr. B', url: 'www.urlB.com' })
+        cy.createBlog({ title: 'third blog', author: 'Mr. C', url: 'www.urlC.com' })
+      })
+      it.only('and a blog can be liked', function () {
+
+        cy.contains('second blog')
+          .contains('view details')
+          .click()
+        cy.contains('like')
+          .click()
+          .click()
+          .click()
+        cy.get('#likes')
+          .should('contain', '3')
+      })
+    })
+
+
+
   })
 
 

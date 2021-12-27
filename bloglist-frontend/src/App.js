@@ -115,6 +115,7 @@ const App = () => {
           <h2>blogs</h2>
           {blogs.map(blog =>
             <Blog
+              id={blog.id}
               key={blog.id}
               blog={blog} user={user}
               onUpdate={sortBlogs}
