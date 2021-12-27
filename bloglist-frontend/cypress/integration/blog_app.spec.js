@@ -40,6 +40,27 @@ describe('Blog app', function () {
       cy.get('.message')
         .should('contain', 'Wrong username or password')
         .and('have.css', 'color', 'rgb(255, 0, 0)')
+      cy.get('html').should('not.contain', 'Tester logged in')
+    })
+  })
+
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.login({ username: 'testing', password: '12345678' })
+    })
+
+    it('A blog can be created', function () {
+      cy.contains('Create new blog').click()
+      cy.get('#title').type('Test Cypress Blog')
+      cy.get('#author').type('Mr. Cypress')
+      cy.get('#url').type('www.cypress.com')
+      cy.get('#button-create-blog').click()
+      cy.get('.message')
+        .should('contain', 'a new blog Test Cypress Blog by Mr. Cypress added')
+        .and('have.css', 'color', 'rgb(0, 128, 0)')
+      cy.get('.blog')
+        .should('contain', 'Test Cypress Blog Mr. Cypress')
+
     })
   })
 
