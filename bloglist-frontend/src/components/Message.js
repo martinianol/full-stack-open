@@ -16,7 +16,7 @@ const Message = (props) => {
 
 
   return (
-    <div style={style}>{props.message}</div>
+    <div style={style} className="message">{props.message}</div>
   )
 
 }
