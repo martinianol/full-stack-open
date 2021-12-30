@@ -8,7 +8,13 @@ describe('Blog app', function () {
       username: 'testing',
       password: '12345678'
     }
+    const user2 = {
+      name: 'Tester2',
+      username: 'testing2',
+      password: '12345678'
+    }
     cy.request('POST', 'http://localhost:3003/api/users', user)
+    cy.request('POST', 'http://localhost:3003/api/users', user2)
 
     cy.visit('http://localhost:3000')
   })
@@ -50,11 +56,8 @@ describe('Blog app', function () {
     })
 
     it('A blog can be created', function () {
-      cy.contains('Create new blog').click()
-      cy.get('#title').type('Test Cypress Blog')
-      cy.get('#author').type('Mr. Cypress')
-      cy.get('#url').type('www.cypress.com')
-      cy.get('#button-create-blog').click()
+      cy.createBlogWithUi({ title: 'Test Cypress Blog', author: 'Mr. Cypress', url: 'www.cypress.com' })
+
       cy.get('.message')
         .should('contain', 'a new blog Test Cypress Blog by Mr. Cypress added')
         .and('have.css', 'color', 'rgb(0, 128, 0)')
@@ -63,13 +66,17 @@ describe('Blog app', function () {
     })
     describe('several blogs can de created', function () {
       beforeEach(function () {
-        cy.createBlog({ title: 'first blog', author: 'Mr. A', url: 'www.urlA.com' })
-        cy.createBlog({ title: 'second blog', author: 'Mr. B', url: 'www.urlB.com' })
-        cy.createBlog({ title: 'third blog', author: 'Mr. C', url: 'www.urlC.com' })
-      })
-      it.only('and a blog can be liked', function () {
+        const blogs = [{ title: 'first blog', author: 'Mr. A', url: 'www.urlA.com' },
+        { title: 'second blog', author: 'Mr. B', url: 'www.urlB.com' },
+        { title: 'third blog', author: 'Mr. C', url: 'www.urlC.com' }
+        ]
 
-        cy.contains('second blog')
+        blogs.forEach(blog => cy.createBlogWithUi(blog))
+        cy.wait(3000)
+      })
+
+      it('and a blog can be liked', function () {
+        cy.get('.blog').contains('second blog')
           .contains('view details')
           .click()
         cy.contains('like')
@@ -79,13 +86,18 @@ describe('Blog app', function () {
         cy.get('#likes')
           .should('contain', '3')
       })
+
+      it.only('and a blog can be removed', function () {
+        cy.get('.blog').contains('first blog')
+          .contains('view details')
+          .click()
+        cy.get('button').contains('Remove')
+          .click()
+
+        cy.get('.message').contains('blog first blog by Mr. A was deleted')
+      })
     })
 
-
-
   })
-
-
-
 
 })

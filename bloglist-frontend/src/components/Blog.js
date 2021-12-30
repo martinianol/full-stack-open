@@ -6,13 +6,7 @@ const Blog = ({ blog, user, onUpdate, removeBlog }) => {
   const [viewHide, setViewHide] = useState('view')
   const [blogLikes, setBloglikes] = useState(blog.likes)
 
-  const isUserBlog = () => {
-    if (user.blogs.includes(blog.id)) {
-      return (
-        <button onClick={handleRemove}>Remove Blog</button>
-      )
-    }
-  }
+
 
   const handleRemove = () => {
     if (
@@ -40,6 +34,14 @@ const Blog = ({ blog, user, onUpdate, removeBlog }) => {
     setBloglikes(blogLikes + 1)
     await blogs.update(blogObject)
     await onUpdate()
+  }
+
+  const isUserBlog = () => {
+    if (user.blogs.includes(blog.id)) {
+      return (
+        <button onClick={handleRemove}>Remove Blog</button>
+      )
+    }
   }
 
   const details = () => {
