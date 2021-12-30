@@ -87,7 +87,7 @@ describe('Blog app', function () {
           .should('contain', '3')
       })
 
-      it.only('and a blog can be removed', function () {
+      it('and a blog can be removed', function () {
         cy.get('.blog').contains('first blog')
           .contains('view details')
           .click()
