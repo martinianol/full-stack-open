@@ -38,8 +38,8 @@ const Blog = ({ blog, user, onUpdate, removeBlog }) => {
       id: blog.id
     }
     setBloglikes(blogLikes + 1)
-    onUpdate()
     await blogs.update(blogObject)
+    await onUpdate()
   }
 
   const details = () => {

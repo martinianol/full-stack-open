@@ -20,6 +20,7 @@ const App = () => {
   useEffect(() => {
     (async () => {
       const blogs = await blogService.getAll()
+      blogs.sort((a, b) => b.likes - a.likes)
       setBlogs(blogs)
     })()
   }, [user])
@@ -32,6 +33,11 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  useEffect(() => {
+    blogs.sort((a, b) => b.likes - a.likes)
+    setBlogs(blogs)
+  }, [blogs])
 
 
   const handleLogin = async (credentials) => {
@@ -86,11 +92,13 @@ const App = () => {
     }, 5000)
   }
 
-  const sortBlogs = () => {
+  const onUpdate = async () => {
+    const blogs = await blogService.getAll()
     blogs.sort((a, b) => b.likes - a.likes)
+    setBlogs(blogs)
   }
 
-  sortBlogs()
+
 
   return (
     <div>
@@ -118,7 +126,7 @@ const App = () => {
               id={blog.id}
               key={blog.id}
               blog={blog} user={user}
-              onUpdate={sortBlogs}
+              onUpdate={onUpdate}
               removeBlog={removeBlog} />
           )}
         </div>
