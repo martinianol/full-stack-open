@@ -9,6 +9,16 @@
       "content": "state changes are made with actions",
       "important": false,
       "id": 2
+    },
+    {
+      "content": "combineReducers forms one reducer from many simple reducers",
+      "important": false,
+      "id": 3
+    },
+    {
+      "content": "Creando",
+      "important": true,
+      "id": 4
     }
   ]
 }
