@@ -46,7 +46,6 @@ const anecdoteReducer = (state = initialState, action) => {
       return state.concat(action.data)
     }
     case 'VOTE': {
-      console.log('entre a VOTE')
       const id = action.data.id
       const anecdoteToChange = state.find(n => n.id === id)
       const changedAnecdote = {

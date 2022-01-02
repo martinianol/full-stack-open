@@ -6,7 +6,11 @@ import Notification from "./Notification"
 
 
 const AnecdoteList = () => {
-  const anecdotes = useSelector(state => state.anecdotes)
+  let anecdotes = useSelector(state => state.anecdotes)
+  const contentToFilter = useSelector(state => state.filter)
+
+  anecdotes = anecdotes.filter(anecdote => anecdote.content.includes(contentToFilter))
+
   const dispatch = useDispatch()
   const vote = (id) => {
     const anecdote = anecdotes.find(anecdote => anecdote.id === id)
