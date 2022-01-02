@@ -18,6 +18,7 @@ const reducer = combineReducers({
 
 const store = createStore(reducer, composeWithDevTools())
 
+
 store.subscribe(() => console.log(store.getState()))
 store.dispatch(filterChange('IMPORTANT'))
 store.dispatch(createNote('combineReducers forms one reducer from many simple reducers'))
