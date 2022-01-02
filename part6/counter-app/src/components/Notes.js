@@ -17,9 +17,8 @@ const Notes = () => {
   const dispatch = useDispatch()
 
   const toggleImportance = async (id) => {
-    const note = await noteService.toggleImportance(id)
-    console.log(note)
     dispatch(toggleImportanceOf(id))
+    await noteService.toggleImportance(id)
   }
 
   return (
