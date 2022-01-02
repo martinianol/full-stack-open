@@ -5,9 +5,6 @@ import VisibilityFilter from './components/VisibilityFilter'
 
 
 const App = () => {
-  const filterSelected = (value) => {
-    console.log(value)
-  }
   return (
     <div>
       <NewNote />
