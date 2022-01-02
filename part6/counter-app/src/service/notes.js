@@ -7,8 +7,7 @@ const getAll = async () => {
   return response.data
 }
 const getById = async (id) => {
-  const notes = await axios.get(baseUrl)
-  const note = notes.find(note => note.data.id === id)
+  const note = await axios.get(`${baseUrl}/${id}`)
   return note.data
 }
 
@@ -32,4 +31,4 @@ const toggleImportance = async (id) => {
 }
 
 
-export default { getAll, createNew, toggleImportance }
+export default { getAll, createNew, toggleImportance, getById }

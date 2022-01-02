@@ -1,3 +1,5 @@
+import anecdoteService from '../services/anecdote'
+
 //ACTIONS
 export const createAnecdote = (content) => {
   return {
@@ -16,10 +18,13 @@ export const voteId = (id) => {
   }
 }
 
-export const initializeAnecdotes = (anecdotes) => {
-  return {
-    type: 'INIT_ANECDOTES',
-    data: anecdotes
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch({
+      type: 'INIT_ANECDOTES',
+      data: anecdotes
+    })
   }
 }
 
