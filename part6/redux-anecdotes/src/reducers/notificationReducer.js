@@ -11,13 +11,6 @@ const notificationReducer = (state = null, action) => {
   }
 }
 export const voteNotification = anecdote => {
-  if (anecdote === null) {
-    const notification = null
-    return {
-      type: 'SET_VOTE_NOTIFICATION',
-      notification,
-    }
-  }
   const notification = `You have voted for '${anecdote.content}'`
   return {
     type: 'SET_VOTE_NOTIFICATION',
@@ -25,17 +18,18 @@ export const voteNotification = anecdote => {
   }
 }
 export const anecdoteNotification = content => {
-  if (content === null) {
-    const notification = null
-    return {
-      type: 'SET_CREATE_NOTIFICATION',
-      notification,
-    }
-  }
   const notification = `You have created anecdote '${content}'`
   return {
     type: 'SET_CREATE_NOTIFICATION',
     notification,
+  }
+}
+
+export const clearNotification = () => {
+  const notification = null
+  return {
+    type: 'SET_CREATE_NOTIFICATION',
+    notification
   }
 }
 
