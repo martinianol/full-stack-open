@@ -35,9 +35,13 @@ export const createNote = (content) => {
 }
 
 export const toggleImportanceOf = (id) => {
-  return {
-    type: 'TOGGLE_IMPORTANCE',
-    data: { id }
+
+  return async dispatch => {
+    await noteService.toggleImportance(id)
+    dispatch({
+      type: 'TOGGLE_IMPORTANCE',
+      data: { id }
+    })
   }
 }
 
