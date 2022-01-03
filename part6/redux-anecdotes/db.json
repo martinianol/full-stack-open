@@ -52,7 +52,7 @@
     },
     {
       "content": "Veamos",
-      "votes": 12,
+      "votes": 13,
       "id": "naq_CDe"
     },
     {
@@ -74,6 +74,11 @@
       "content": "Es mas largo?",
       "votes": 2,
       "id": "kVQ2F9Y"
+    },
+    {
+      "content": "Connect works!",
+      "votes": 0,
+      "id": "_A0XrV1"
     }
   ]
 }
