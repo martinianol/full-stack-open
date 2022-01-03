@@ -25,7 +25,7 @@ export const setNotification = (content) => {
 }
 
 export const setNotificationWithTimeout = (text, time) => {
-  console.log(time * 1000)
+
   return function (dispatch) {
     dispatch(setNotification(text))
     setTimeout(() => {
