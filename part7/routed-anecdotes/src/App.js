@@ -86,21 +86,26 @@ const CreateNew = (props) => {
     info.reset()
   }
 
+  function getSpecificKeys(input) {
+    const { type, value, onChange } = input
+    return { type, value, onChange }
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' type={content.type} value={content.value} onChange={content.onChange} />
+          <input name='content' {...getSpecificKeys(content)} />
         </div>
         <div>
           author
-          <input name='author' type={author.type} value={author.value} onChange={author.onChange} />
+          <input name='author' {...getSpecificKeys(author)} />
         </div>
         <div>
           url for more info
-          <input name='info' type={info.type} value={info.value} onChange={info.onChange} />
+          <input name='info' {...getSpecificKeys(info)} />
         </div>
         <button>create</button>
         <button onClick={handleReset}>reset</button>
