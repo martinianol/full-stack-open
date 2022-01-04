@@ -1,0 +1,58 @@
+{
+  "notes": [
+    {
+      "content": "custom-hooks are grat",
+      "id": 1
+    },
+    {
+      "content": "the best featrure ever <3",
+      "id": 2
+    },
+    {
+      "content": "Veamos",
+      "id": 3
+    },
+    {
+      "content": "Paerce que funka",
+      "id": 4
+    },
+    {
+      "content": "Y???",
+      "id": 5
+    },
+    {
+      "content": "Prueba",
+      "id": 6
+    },
+    {
+      "content": "Test",
+      "id": 7
+    },
+    {
+      "content": "Test2",
+      "id": 8
+    }
+  ],
+  "persons": [
+    {
+      "name": "mluukkai",
+      "number": "040-5483923",
+      "id": 1
+    },
+    {
+      "name": "kaltsoon",
+      "number": "045-2323456",
+      "id": 2
+    },
+    {
+      "name": "Mars",
+      "number": "4020303",
+      "id": 3
+    },
+    {
+      "name": "Mars",
+      "number": "4804-7341",
+      "id": 4
+    }
+  ]
+}
