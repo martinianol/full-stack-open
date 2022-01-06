@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
+/* import { useDispatch } from 'react-redux' */
+import { store } from './services/store'
+import { setNotification } from './reducers/notificationReducer'
+import { useSelector, useDispatch } from 'react-redux'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import CreateBlog from './components/CreateBlog'
@@ -16,7 +20,7 @@ const App = () => {
   const [user, setUser] = useState(null)
 
   const blogFormRef = useRef()
-
+  const dispatch = useDispatch()
   useEffect(() => {
     (async () => {
       const blogs = await blogService.getAll()
@@ -51,12 +55,14 @@ const App = () => {
 
 
     } catch (exception) {
-      setMessage('Wrong username or password')
+      console.log('entre al exception')
+      dispatch(setNotification('Wrong username or password', 5))
+      /*  setMessage('Wrong username or password') */
       setError(true)
-      setTimeout(() => {
+      /* setTimeout(() => {
         setMessage(null)
         setError(false)
-      }, 5000)
+      }, 5000) */
     }
 
   }
@@ -100,12 +106,13 @@ const App = () => {
     setBlogs(blogs)
   }
 
-
+  const message2 = useSelector(state => state)
+  console.log('state store', message2)
 
   return (
     <div>
       {
-        message !== null && <Message message={message} isError={error} />
+        message2 !== null && <Message message={message2} isError={error} />
       }
       {user === null ?
         <LoginForm

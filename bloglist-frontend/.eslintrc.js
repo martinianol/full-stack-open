@@ -7,7 +7,7 @@ module.exports = {
     /* 'cypress/globals': true */
   },
   'extends': [
-    'eslint:recommended',
+    /* 'eslint:recommended', */
     'plugin:react/recommended'
   ],
   'parserOptions': {
