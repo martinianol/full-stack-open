@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 /* import { useDispatch } from 'react-redux' */
 import { store } from './services/store'
 import { setNotification } from './reducers/notificationReducer'
+import { setError } from './reducers/errorReducer'
 import { useSelector, useDispatch } from 'react-redux'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
@@ -15,7 +16,7 @@ import _ from 'lodash'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [error, setError] = useState(false)
+  /* const [error, setError] = useState(false) */
   const [message, setMessage] = useState(null)
   const [user, setUser] = useState(null)
 
@@ -57,12 +58,7 @@ const App = () => {
     } catch (exception) {
       console.log('entre al exception')
       dispatch(setNotification('Wrong username or password', 5))
-      /*  setMessage('Wrong username or password') */
-      setError(true)
-      /* setTimeout(() => {
-        setMessage(null)
-        setError(false)
-      }, 5000) */
+      dispatch(setError(true))
     }
 
   }
@@ -106,7 +102,8 @@ const App = () => {
     setBlogs(blogs)
   }
 
-  const message2 = useSelector(state => state)
+  const message2 = useSelector(state => state.notification)
+  const error = useSelector(state => state.error)
   console.log('state store', message2)
 
   return (
