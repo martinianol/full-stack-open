@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import blogs from '../services/blogs'
 
 const Blog = ({ blog, user, onUpdate, removeBlog }) => {
   const [view, setView] = useState(false)
   const [viewHide, setViewHide] = useState('view')
   const [blogLikes, setBloglikes] = useState(blog.likes)
-
-
 
   const handleRemove = () => {
     if (
@@ -22,14 +21,9 @@ const Blog = ({ blog, user, onUpdate, removeBlog }) => {
   }
 
   const addLike = async () => {
-
     let blogObject = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
+      ...blog,
       likes: blog.likes + 1,
-      user: blog.user.id,
-      id: blog.id
     }
     setBloglikes(blogLikes + 1)
     await blogs.update(blogObject)
