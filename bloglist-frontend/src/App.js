@@ -1,38 +1,30 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  BrowserRouter as Router,
+  Switch, Route, Link
+} from 'react-router-dom'
+
+
 import { setNotification } from './reducers/notificationReducer'
 import { setError } from './reducers/errorReducer'
 import { setUser, getUserLocalStorage } from './reducers/userReducer'
-import { useSelector, useDispatch } from 'react-redux'
-import BlogList from './components/BlogList'
-/* import Blog from './components/Blog' */
-import LoginForm from './components/LoginForm'
-import CreateBlog from './components/CreateBlog'
-import Message from './components/Message'
-import Togglable from './components/Togglable'
+
+
 import blogService from './services/blogs'
 import loginService from './services/login'
 
-
-import _ from 'lodash'
-import { initializeBlogs, createBlog, setBlogs } from './reducers/blogsReducer'
+import LoginForm from './components/LoginForm'
+import Message from './components/Message'
+import Blogs from './components/Blogs'
+import Users from './components/Users'
 
 const App = () => {
   const notification = useSelector(state => state.notification)
   const error = useSelector(state => state.error)
   const user = useSelector(state => state.user)
 
-  const blogFormRef = useRef()
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(initializeBlogs())
-  }, [dispatch])
-
-  useEffect(() => {
-    (async () => {
-      dispatch(setBlogs())
-    })()
-  }, [user])
 
   useEffect(() => {
     getUserLocalStorage()
@@ -60,20 +52,9 @@ const App = () => {
     dispatch(setUser(null))
   }
 
-  const addBlog = async (blogObject) => {
-
-    const returnedBlog = await blogService.create(blogObject)
-    dispatch(createBlog(returnedBlog))
-    blogFormRef.current.toggleVisibility()
-    user.blogs = user.blogs.concat(returnedBlog.id)
-    dispatch(setUser(user))
-    dispatch(setNotification(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`, 5))
-  }
-
-
 
   return (
-    <div>
+    <Router>
       {
         notification !== null && <Message message={notification} isError={error} />
       }
@@ -85,17 +66,18 @@ const App = () => {
         <div>
           <p>{user.name} logged in</p>
           <button onClick={handleLogout}>Logout</button>
-          <Togglable
-            buttonLabel="Create new blog"
-            ref={blogFormRef}>
-            <CreateBlog
-              createBlog={addBlog}
-            />
-          </Togglable>
-          <BlogList user={user} />
+          <Switch>
+            <Route path='/blogs'>
+              <Blogs />
+            </Route>
+            <Route path='/users'>
+              <Users />
+            </Route>
+
+          </Switch>
         </div>
       }
-    </div>
+    </Router>
   )
 }
 
