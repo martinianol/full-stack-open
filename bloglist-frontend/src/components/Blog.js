@@ -1,24 +1,10 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
-import blogs from '../services/blogs'
+import blogService from '../services/blogs'
+import { Redirect } from 'react-router-dom'
 
-const Blog = ({ blog, user, onUpdate, removeBlog }) => {
-  const [view, setView] = useState(false)
-  const [viewHide, setViewHide] = useState('view')
+const Blog = ({ blog, user, handleRemove, onUpdate }) => {
+
   const [blogLikes, setBloglikes] = useState(blog.likes)
-
-  const handleRemove = () => {
-    if (
-      window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
-    ) {
-      removeBlog(blog.id)
-    }
-  }
-
-  const handleView = () => {
-    setView(!view)
-    viewHide === 'view' ? setViewHide('hide') : setViewHide('view')
-  }
 
   const addLike = async () => {
     let blogObject = {
@@ -26,7 +12,7 @@ const Blog = ({ blog, user, onUpdate, removeBlog }) => {
       likes: blog.likes + 1,
     }
     setBloglikes(blogLikes + 1)
-    await blogs.update(blogObject)
+    await blogService.update(blogObject)
     await onUpdate()
   }
 
@@ -38,24 +24,6 @@ const Blog = ({ blog, user, onUpdate, removeBlog }) => {
     }
   }
 
-  const details = () => {
-
-    return (
-      <div className='details'>
-        <p>
-          url: {blog.url}
-        </p>
-        <p id='likes'>
-          likes: {blogLikes} <button onClick={addLike}>like</button>
-        </p>
-        <p>
-          user: {blog.user.username}
-        </p>
-        {isUserBlog()}
-      </div>
-    )
-  }
-
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -65,12 +33,28 @@ const Blog = ({ blog, user, onUpdate, removeBlog }) => {
   }
 
   return (
-    <div style={blogStyle} className='blog'>
-      {blog.title} {blog.author}
-      <button onClick={handleView}>{viewHide} details</button>
-      {view && details()}
-
-    </div>
+    <>
+      {!blog
+        ? <Redirect to='/blogs' />
+        :
+        <div style={blogStyle} className='blog'>
+          <h2>Blog</h2>
+          {blog.title} {blog.author}
+          <div className='details'>
+            <p>
+              url: {blog.url}
+            </p>
+            <p id='likes'>
+              likes: {blogLikes} <button onClick={addLike}>like</button>
+            </p>
+            <p>
+              user: {blog.user.username}
+            </p>
+            {isUserBlog()}
+          </div>
+        </div>
+      }
+    </>
   )
 }
 

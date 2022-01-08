@@ -25,6 +25,7 @@ const blogReducer = (state = [], action) => {
     case 'REMOVE_BLOG': {
       const id = action.data.id
       const updatedBlogs = _.filter(state, blog => blog.id !== id)
+      console.log('REMOVE_BLOG', updatedBlogs)
       return updatedBlogs
 
     }
