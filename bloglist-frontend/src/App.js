@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
-  BrowserRouter as Router,
   Switch, Route, Link
 } from 'react-router-dom'
 
@@ -18,6 +17,7 @@ import LoginForm from './components/LoginForm'
 import Message from './components/Message'
 import Blogs from './components/Blogs'
 import Users from './components/Users'
+import NavBar from './components/Navbar'
 
 const App = () => {
   const notification = useSelector(state => state.notification)
@@ -43,18 +43,11 @@ const App = () => {
       dispatch(setNotification('Wrong username or password', 5))
       dispatch(setError(true))
     }
-
   }
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogappUser')
-    blogService.setToken(null)
-    dispatch(setUser(null))
-  }
-
 
   return (
-    <Router>
+    <div>
+
       {
         notification !== null && <Message message={notification} isError={error} />
       }
@@ -64,8 +57,7 @@ const App = () => {
         />
         :
         <div>
-          <p>{user.name} logged in</p>
-          <button onClick={handleLogout}>Logout</button>
+          <NavBar />
           <Switch>
             <Route path='/blogs'>
               <Blogs />
@@ -73,11 +65,10 @@ const App = () => {
             <Route path='/users'>
               <Users />
             </Route>
-
           </Switch>
         </div>
       }
-    </Router>
+    </div>
   )
 }
 
