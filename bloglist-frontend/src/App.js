@@ -7,6 +7,7 @@ import { setNotification } from './reducers/notificationReducer'
 import { setError } from './reducers/errorReducer'
 import { setUser, getUserLocalStorage } from './reducers/userReducer'
 import { setBlogs, setRemoveBlog } from './reducers/blogsReducer'
+import { setUsers } from './reducers/usersReducer'
 
 
 import blogService from './services/blogs'
@@ -38,6 +39,10 @@ const App = () => {
 
   useEffect(() => {
     dispatch(setBlogs())
+  }, [])
+
+  useEffect(() => {
+    dispatch(setUsers())
   }, [])
 
   const handleLogin = async (credentials) => {
