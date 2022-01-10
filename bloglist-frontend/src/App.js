@@ -19,17 +19,25 @@ import BlogList from './components/BlogList'
 import Blog from './components/Blog'
 import Users from './components/Users'
 import NavBar from './components/Navbar'
+import User from './components/User'
 
 const App = () => {
   const notification = useSelector(state => state.notification)
   const error = useSelector(state => state.error)
   const user = useSelector(state => state.user)
+  const users = useSelector(state => state.users)
+  console.log('users', users)
   const blogs = useSelector(state => state.blogs)
 
   const blogMatch = useRouteMatch('/blogs/:id')
   const blog = blogMatch
     ? blogs.find(blog => blog.id === blogMatch.params.id)
     : null
+  const userMatch = useRouteMatch('/users/:id')
+  const userToShow = userMatch
+    ? users.find(user => user.id === userMatch.params.id)
+    : null
+  console.log('userToShow', userToShow)
 
   const dispatch = useDispatch()
 
@@ -100,10 +108,15 @@ const App = () => {
                   user={user}
                   handleRemove={handleRemove}
                   onUpdate={onUpdate} />
-                : <Redirect to="/blogs" />}
+                : <Redirect to='/blogs' />}
             </Route>
             <Route path='/blogs'>
               <BlogList blogs={blogs} user={user} />
+            </Route>
+            <Route path='/users/:id' >
+              {userToShow
+                ? <User user={userToShow} />
+                : <Redirect to='/users' />}
             </Route>
             <Route path='/users'>
               <Users />
