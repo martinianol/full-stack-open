@@ -1,10 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import blogService from '../services/blogs'
 import { Redirect } from 'react-router-dom'
+import CreateComment from './CreateComment'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../reducers/userReducer'
+import { setNotification } from '../reducers/notificationReducer'
+import { setError } from '../reducers/errorReducer'
+import { setBlogs } from '../reducers/blogsReducer'
+
 
 const Blog = ({ blog, user, handleRemove, onUpdate }) => {
 
   const [blogLikes, setBloglikes] = useState(blog.likes)
+
+
+  const [blogComments, setBlogComments] = useState(blog.comments)
+
+  /*  useEffect(() => { areComments() }, [blogComments]) */
+
 
   const addLike = async () => {
     let blogObject = {
@@ -22,6 +35,47 @@ const Blog = ({ blog, user, handleRemove, onUpdate }) => {
         <button onClick={handleRemove}>Remove Blog</button>
       )
     }
+  }
+
+  const addComment = (commentObject) => {
+    console.log('blog Comments 1', blogComments)
+    /*  const returnedComment = await blogService.create(commentObject) */
+
+    /* dispatch(createComment(returnedComment)) */
+    setBlogComments(blogComments.concat(commentObject))
+    console.log('blog Comments after concat', blogComments)
+
+    blog.comments = blogComments
+
+
+    /*     dispatch(setBlogs) */
+    /* user.blogs.comments = user.blogs.concat(commentObject)
+  */
+    /* dispatch(setUser(user))
+    dispatch(setNotification(`a new comment ${returnedComment.content} added`, 5))
+    dispatch(setError(false)) */
+  }
+
+  const areComments = () => {
+    console.log('Blog Comments inside AreComments', blog.comments)
+    /*  console.log(blog.comments[0]._id) */
+    if (blog.comments) {
+      return (
+        <div>
+          <h3>Comments</h3>
+          <ul>
+            {blog.comments.map(comment => {
+              return (
+                <li key={comment._id}>{comment.content}</li>
+              )
+            })}
+          </ul>
+        </div>
+      )
+    } else {
+      return null
+    }
+
   }
 
   const blogStyle = {
@@ -50,6 +104,8 @@ const Blog = ({ blog, user, handleRemove, onUpdate }) => {
             <p>
               user: {blog.user.username}
             </p>
+            <CreateComment createComment={addComment} />
+            {areComments()}
             {isUserBlog()}
           </div>
         </div>
