@@ -7,7 +7,6 @@ import { FIND_PERSON } from '../queries'
 const Persons = ({ persons }) => {
   const [person, setPerson] = useState(null)
   const [getPerson, result] = useLazyQuery(FIND_PERSON)
-  console.log(person)
 
   const showPerson = (name) => {
     getPerson({ variables: { nameToSearch: name } })
