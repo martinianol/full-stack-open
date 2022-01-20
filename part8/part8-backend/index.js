@@ -1,9 +1,11 @@
-const { ApolloServer, UserInputError, gql } = require('apollo-server')
+const { ApolloServer, UserInputError, AuthenticationError, gql } = require('apollo-server')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
-const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
+const { v1: uuid } = require('uuid')
+const JWT_SECRET = 'secret'
 
 const Person = require('./models/person')
+const User = require('./models/user')
 
 const MONGODB_URI = 'mongodb+srv://fullstack:20303574@cluster0.yrs0y.mongodb.net/graphqlDB?retryWrites=true' //check this line if it doesnt work
 
@@ -97,6 +99,10 @@ const typeDefs = gql`
       username: String!
       password: String!
     ): Token
+    
+    addAsFriend(
+      name: String!
+    ): User
   }
 `
 
@@ -126,6 +132,11 @@ const resolvers = {
   Mutation: {
     addPerson: async (root, args) => {
       const person = new Person({ ...args })
+      const currentUser = context.currentUser
+
+      if (!currentUser) {
+        throw new AuthenticationError("not authenticated")
+      }
 
       try {
         await person.save()
@@ -159,21 +170,39 @@ const resolvers = {
             invalidArgs: args,
           })
         })
-    }
-  },
-  login: async (root, args) => {
-    const user = await User.findOne({ username: args.username })
+    },
+    login: async (root, args) => {
+      const user = await User.findOne({ username: args.username })
 
-    if (!user || args.password !== 'secret') {
-      throw new UserInputError("wrong credentials")
-    }
+      if (!user || args.password !== 'secret') {
+        throw new UserInputError("wrong credentials")
+      }
 
-    const userForToken = {
-      username: user.username,
-      id: user._id,
-    }
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      }
 
-    return { value: jwt.sign(userForToken, JWT_SECRET) }
+      return { value: jwt.sign(userForToken, JWT_SECRET) }
+    },
+    addAsFriend: async (root, args, { currentUser }) => {
+      const nonFriendAlready = (person) =>
+        !currentUser.friends.map(f => f._id).includes(person._id)
+
+      if (!currentUser) {
+        throw new AuthenticationError("not authenticated")
+      }
+
+      const person = await Person.findOne({ name: args.name })
+      if (nonFriendAlready(person)) {
+        currentUser.friends = currentUser.friends.concat(person)
+      }
+
+      await currentUser.save()
+
+      return currentUser
+    },
+
   }
 }
 
